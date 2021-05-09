@@ -20,6 +20,7 @@ RemindMe
                 <ul class="nav navbar-nav">
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     <li><a href="{{ url_for('login') }}">Login</a></li>
+                    <li><a href="{{ url_for('register') }}">Register</a></li>
                     <li><a href="{{ url_for('user') }}">Manage Reminders</a></li>
                     <li><a href="#">Logout</a></li>
                 </ul>
@@ -29,6 +30,16 @@ RemindMe
 {% endblock %}
 
 {% block content %}
+
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<ul>
+  {% for message in messages %}
+  <li>{{ message }}</li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
 
 {% block app_content %}{% endblock %}
 
