@@ -1,13 +1,14 @@
-<html>
+{% extends "bootstrap/base.html" %}
 
-  <title>RemindMe</title>
+{% block title %}
+RemindMe
+{% endblock %}
 
-  <body>
+{% block navbar %}
+{% endblock %}
 
-    <a href="/index">Home</a>
-    <hr>
-    {% block content %}{% endblock %}
+{% block content %}
 
-  </body>
+{% block app_content %}{% endblock %}
 
-</html>
+{% endblock %}
