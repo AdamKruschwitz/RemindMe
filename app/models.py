@@ -8,7 +8,8 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(64))
     phone_number = db.Column(db.String(10), index=True, unique=True)
     password_hash = db.Column(db.String(128))
-    reminders = db.relationship('Reminder', backref='owner', lazy='dynamic')
+    active = db.Column(db.Boolean, default=False)
+    reminders = db.relationship('Reminder', backref='author', lazy='dynamic')
 
     def set_password(self, password):
         self.password_hash = generate_password_hash(password)
@@ -24,7 +25,7 @@ class Reminder(db.Model):
     text = db.Column(db.String(160))
     date_to_send = db.Column(db.DateTime, default=datetime.utcnow)
     date_last_sent = db.Column(db.DateTime)
-    user_id = db.column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     def __repr__(self):
         return '<Reminder {}>'.format(self.text)
