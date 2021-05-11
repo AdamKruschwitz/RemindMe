@@ -1,8 +1,8 @@
-from flask import render_template, flash, redirect, url_for
+from flask import render_template, flash, redirect, url_for, request
 from flask_login import current_user, login_user, logout_user, login_required
 from flask_mail import Message
 from app import app, db, mail
-from app.forms import LoginForm, RegistrationForm
+from app.forms import LoginForm, RegistrationForm, ReminderForm
 from app.models import User, Reminder
 from app.email import send_phone_verification
 from app.tokens import generate_confirmation_token, confirm_token
@@ -33,6 +33,7 @@ def login():
         if not next_page or url_parse(next_page).netloc != '':
             next_page = url_for('index')
         return redirect(next_page)
+    return render_template('login.html', form=form)
 
 @app.route('/logout')
 def logout():
@@ -48,7 +49,6 @@ def register():
     if form.validate_on_submit():
         user = User(username=form.username.data, phone_number=form.phone_number.data)
         user.set_password(form.password.data)
-        newId = user.id
         db.session.add(user)
         db.session.commit()
 
@@ -76,6 +76,20 @@ def confirm_phone_number(token):
         db.session.commit()
         flash('You have verified your account.')
     return redirect(url_for('index'))
+
+@app.route('/new_reminder', methods=['GET', 'POST'])
+@login_required
+def new_reminder():
+    form = ReminderForm()
+    if form.validate_on_submit():
+        reminder = Reminder(text=form.body.data, date_to_send=form.datetime.data, recurring=form.recurring.data, interval=form.interval.data)
+        db.session.add(reminder)
+        db.session.commit()
+        flash("Your reminder has been created.")
+        return redirect(url_for('index'))
+
+    return render_template('new_reminder.html', form=form)
+
 
 # DEBUG, REMOVE BEFORE DEPLOYMENT
 @app.route('/resetdb')

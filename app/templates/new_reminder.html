@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block app_content %}
+<h1>New Reminder</h1>
+<form action="#" method="post" novalidate>
+    {{ form.hidden_tag() }}
+    <p>
+        {{ form.body.label }}<br>
+        {{ form.body(size=32) }}<br>
+        {% for error in form.body.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>
+        {{ form.datetime.label }}<br>
+        <p>'%Y-%m-%d %H:%M:%S' </p>
+        {{ form.datetime(class='datepicker') }}<br>
+        {% for error in form.datetime.errors %}
+        <span style="color: red;">[{{ error }}]</span>
+        {% endfor %}
+    </p>
+    <p>{{ form.recurring() }} {{ form.recurring.label }}</p>
+    <p>
+      {{ form.interval.label }}<br>
+      {{ form.interval(size=32) }}<br>
+    <p>{{ form.submit() }}</p>
+</form>
+
+{% endblock %}

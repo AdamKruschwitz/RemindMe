@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField
+from wtforms import StringField, PasswordField, BooleanField, SubmitField, IntegerField
 from wtforms.validators import DataRequired, ValidationError, EqualTo
-from wtforms.fields.html5 import TelField
+from wtforms.fields.html5 import TelField, DateTimeField
 from app.models import User
 
 class LoginForm(FlaskForm):
@@ -26,3 +26,10 @@ class RegistrationForm(FlaskForm):
         user = User.query.filter_by(phone_number=phone_number.data).first()
         if user is not None:
             raise ValidationError('This phone number is already registered.')
+
+class ReminderForm(FlaskForm):
+    body = StringField('Body', validators=[DataRequired()])
+    datetime = DateTimeField('Date', validators=[DataRequired()])
+    recurring = BooleanField('Recurring')
+    interval = IntegerField('interval')
+    submit = SubmitField('Create New Reminder')

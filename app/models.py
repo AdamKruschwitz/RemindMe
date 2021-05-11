@@ -26,6 +26,8 @@ class Reminder(db.Model):
     date_to_send = db.Column(db.DateTime, default=datetime.utcnow)
     date_last_sent = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    recurring = db.Column(db.Boolean)
+    interval = db.Column(db.Integer)
 
     def __repr__(self):
         return '<Reminder {}>'.format(self.text)
